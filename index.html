@@ -5,54 +5,123 @@
     <title>Title</title>
 </head>
 <body>
+<div id="app">
+    <form action="#" id="example_form">
+        <input type="text" name="user">
+        <br>
+        <input type="text" name="pass">
+        <br>
+        <input type="password" name="password">
+        <input type="radio" name="radio">r1
+        <input type="radio" name="radio">r2
+        <br>
+        <input type="checkbox" name="checkbox"> c1
+        <input type="checkbox" name="checkbox"> c2
+        <br>
+        <textarea name="textarea" cols="30" rows="10"></textarea>
+        <br>
+        <button type="submit">submit</button>
+    </form>
+</div>
 
 </body>
-</html>
+<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="validator.min.js"></script>
+<script src="validateCheck.js"></script>
+<!--<script src="test.js"></script>-->
+
 <script>
-    var arr = [
-        {
-            name: 'user',
-            rules: [
-                {
-                    rule: 'required',
-                    msg: '必填'
-                },
-                {
-                    rule: 'length',
-                    min: 0,
-                    max: 15,
-                    msg: '长度校验！',
-                    // 条件校验 （什么条件下去）
-                    depends: function (field, fields) {
-                        return Math.random() > .5;// 返回都是true和false
-                    }
-                },
-                // 自定义格式
-                {
-                    rule: 'callback',
-                    callback: function (field, fields) {
-                        return Math.random() > .5; // 返回都是true和false
+    $(function () {
+        // 全局设置自定义校验规则
+        var arr = [
+            {
+                name: 'user',
+                rules: [
+                    {
+                        rule: 'required',
+                        msg: '必填'
                     },
-                    msg: '自定义校验函数！'
-                },
-                // 正则
-                {
-                    rule: 'regex',
-                    regex: '/^[0-9]+$/',
-                    msg: '自定义正则'
-                },
-                {   rule: 'is_mobile',
-                    area: 'zh-CN', // 验证手机的所在地区
-                    msg: '是否是手机号',
-                },
-                {
-                    rule: 'is_email',
-                    msg: '是否是邮箱'
-                },
-                {
-                    rule: 'is_ascii',
-                    msg: ' if the string contains ASCII chars only.'
-                }
-            ]
-        }]
+                    {
+                        rule: 'is_length',
+                        min: 0,
+                        max: 2,
+                        msg: '长度校验！',
+                        // 条件校验 （什么条件下去）
+                        depends: function (field, fields) {
+                            return true;
+                        }
+                    },
+                    // 自定义格式
+                    {
+                        rule: 'callback',
+                        callback: function (field, fields) {
+                            var a = Math.random();
+                            return a > .5;// 返回都是true和false
+                        },
+                        msg: '自定义校验函数！'
+                    },
+                    // 正则
+                    {
+                        rule: 'regexp',
+                        regexp: '/^[0-9]+$/',
+                        msg: '自定义正则'
+                    },
+                    //  用于password验证
+                    {
+                        rule: 'confirm',
+                        confirm_name: 'password', // 字段名
+                        msg: '确认密码不正确'
+                    },
+                    {   rule: 'is_mobile',
+                        area: ['zh-cn'], // 验证手机的所在地区，可同时验证多个地区
+                        msg: '是否是手机号',
+                    },
+                    {
+                        rule: 'is_email',
+                        msg: '是否是邮箱'
+                    },
+                    {
+                        rule: 'is_ascii',
+                        msg: ' if the string contains ASCII chars only.'
+                    },
+                    {
+                        rule: 'is_json',
+                        msg: '是否是json格式'
+                    }
+                ]
+            },
+            {
+                name: 'pass',
+                rules: [
+                    {
+                        rule: 'is_ip',
+                        msg: '是否是ip地址'
+                    }
+                ]
+            },
+            {
+                name: 'textarea',
+                rules: [
+                    {
+                        rule: 'required',
+                        msg: '文本域不能为空'
+                    }
+                ]
+            }
+        ];
+
+
+        var form_validator = new validateCheck('example_form', arr, function (obj, event) {
+            if (!obj.is_success) {
+                return alert(obj.errors.join('\n'));
+            }
+        });
+
+        $("form").submit(function () {
+            return false;
+        });
+
+    });
 </script>
+</html>
