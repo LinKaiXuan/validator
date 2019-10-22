@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <form action="#" id="example_form">
+        <input type="text" name="user" id="take">
+        <br>
+        <input type="text" name="pass" id="add">
+        <br>
+        <input type="radio" name="radio">r1
+        <input type="radio" name="radio">r2
+        <br>
+        <input type="checkbox" name="checkbox"> c1
+        <input type="checkbox" name="checkbox"> c2
+        <br>
+        <textarea name="textarea" cols="30" rows="10"></textarea>
+        <br>
+        <button type="submit">submit</button>
+    </form>
+</div>
+
+</body>
+<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script src="validator.min.js"></script>
+<script src="validator.extend.js"></script>
+<!--<script src="test.js"></script>-->
+
+<script>
+    $(function () {
+        // 全局设置自定义校验规则
+        var form_validator = new validator.check('example_form', [
+            {
+                name: 'user',
+                rules: [
+                    // 若是库内的所有校验方法  有带参数就写在括号里,没带的则直接写isEmail即可。
+                    // 规则重名时的优先级别 1、自定义规则 2、本地库规则 3、validator库规则
+                    {rule: 'required', msg: '必填'},
+                    {
+                        rule: 'isLength({min:5, max: 10})',
+                        msg: '长度校验！',
+                        depends: function (field, fields) {
+                            // 条件校验
+                            return true;
+                        }
+                    },
+                    {rule: 'check_password', msg: '不管是啥值反正都是错！'},
+                    {rule: 'isMobilePhone(["zh-CN"])', msg: '手机号校验！',  depends: 'take'},
+                    {rule: 'isEmail', msg: '不是邮箱'},
+                    {rule: '/^[0-9]+$/', type: 'regex', msg: '222'},
+                ]
+            },
+            {
+                name: 'pass',
+                rules: [
+                    {rule: '!isEmpty', msg: '333'},
+                    {rule: '/^((\\+?[0-9]{1,4})|(\\(\\+86\\)))?(13[0-9]|14[57]|15[012356789]|17[03678]|18[0-9])\\d{8}$/',
+                        type: 'regex', msg: '正则错误'},
+                ],
+                msg: '使用'
+            },{
+                name: 'checkbox',
+                rules: [
+                    {rule: 'required', msg: '必填选择框'},
+                    {rule: 'isEmail', msg: '这是选择框'}
+                ]
+            }, {
+               name: 'textarea',
+                rules: [
+                    {rule: 'required', msg: '必填文本'},
+                    {rule: 'isEmail', msg: '这是写文本的地方'}
+                ]
+            }], function (info, event) {
+            console.log(info);
+        });
+
+        form_validator.regCallback('check_password', function(field) {
+            // 写各种奇葩校验规则
+            return false;
+        });
+        
+        // form_validator.regConditional('take', function (field) {
+        //     // 写各种奇葩校验条件  true校验  false不校验
+        //     console.log(field);
+        //     return true;
+        // });
+
+        $("form").submit(function () {
+            return false;
+        });
+
+    });
+</script>
+</html>

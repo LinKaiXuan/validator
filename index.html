@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    var arr = [
+        {
+            name: 'user',
+            rules: [
+                {
+                    rule: 'required',
+                    msg: '必填'
+                },
+                {
+                    rule: 'length',
+                    min: 0,
+                    max: 15,
+                    msg: '长度校验！',
+                    // 条件校验 （什么条件下去）
+                    depends: function (field, fields) {
+                        return Math.random() > .5;// 返回都是true和false
+                    }
+                },
+                // 自定义格式
+                {
+                    rule: 'callback',
+                    callback: function (field, fields) {
+                        return Math.random() > .5; // 返回都是true和false
+                    },
+                    msg: '自定义校验函数！'
+                },
+                // 正则
+                {
+                    rule: 'regex',
+                    regex: '/^[0-9]+$/',
+                    msg: '自定义正则'
+                },
+                {   rule: 'is_mobile',
+                    area: 'zh-CN', // 验证手机的所在地区
+                    msg: '是否是手机号',
+                },
+                {
+                    rule: 'is_email',
+                    msg: '是否是邮箱'
+                },
+                {
+                    rule: 'is_ascii',
+                    msg: ' if the string contains ASCII chars only.'
+                }
+            ]
+        }]
+</script>
