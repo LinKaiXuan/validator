@@ -75,11 +75,11 @@
                     },
                     {   rule: 'is_mobile',
                         area: ['zh-cn'], // 验证手机的所在地区，可同时验证多个地区
-                        msg: '是否是手机号',
+                        msg: '手机号不正确',
                     },
                     {
                         rule: 'is_email',
-                        msg: '是否是邮箱'
+                        msg: '邮箱不正确'
                     },
                     {
                         rule: 'is_ascii',
@@ -117,6 +117,7 @@
                 return alert(obj.errors.join('\n'));
             }
         });
+
 
         $("form").submit(function () {
             return false;

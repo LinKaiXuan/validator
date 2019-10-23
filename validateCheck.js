@@ -30,8 +30,6 @@
             is_length: function (field) {
                 var value = field.value, rule = self.getRule('is_length');
                 var min = rule.min || 0, max = rule.max || undefined;
-                console.log(min, max);
-                console.log(validator.isLength(value, {min:min, max: max}));
                 return validator.isLength(value, {min:min, max: max})
             },
             is_mobile: function (field) {
@@ -187,7 +185,6 @@
         for (var i = 0; i < rules.length; i++) {
             var rule = rules[i].rule;
             rules[i].condition = rules[i].depends && typeof rules[i].depends === 'function'? rules[i].depends(field, that.fields) : true;
-            console.log(rules[i].condition);
             var is_success = true;
             if (!is_require && that['_hooks'].is_empty(field)) {
                 break;
